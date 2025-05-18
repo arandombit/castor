@@ -1,0 +1,7 @@
+/target
+/backup
+**/*.rs.bk
+
+data.json
+backup.*.json
+*.db

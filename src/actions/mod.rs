@@ -1,0 +1,25 @@
+#[non_exhaustive]
+pub enum Action {
+  ImportLibrary,
+  LoadData,
+  ReadRandom,
+  SaveData,
+  ShowFinished,
+  ShowOldestRead,
+  ShowUnfinished,
+  AddReading((String, String, u32)),
+  AddBookmark(u32, u32),
+  CurrentlyReading(i64),
+  EditReading(u32, String, String),
+  GetStats(i64),
+  FindByID(u32),
+  FinishReading(u32),
+  RemoveReading(u32),
+  ResetReading(u32),
+  SearchKeyword(String),
+  ShowFilter(String),
+  ShowAverage(u32),
+  ShowRecent(usize),
+  ShowBookmarks(u32),
+  UndoBookmark(u32)
+}
