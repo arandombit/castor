@@ -1,0 +1,22 @@
+Command parameters are prefaced with an `@` symbol
+Commands:
+  add        @<title> @<author> @<pages>
+  edit       @<reading_id> @<property> @<edit>
+  finish     @<reading_id>
+  rm         @<reading_id>
+  reset      @<reading_id>
+  find       @<keyword>
+  id         @<reading_id>
+  bookmark   @<reading_id> @<page>
+  bookmarks  @<reading_id>
+  reading    @<reading_id>
+  show       @<all|reading|unread>
+  stats      @<day|week|biweek|month|all|[1..n]>
+
+  avg        @<[1..n]> Show average pages read last n days
+  exit       Close program
+  finished   Show all finished books
+  unfinished Show all unfinished books
+  last       Show oldest bookmark for an unfinished reading
+  random     Choose a random unfinished reading
+  save       Save newly added metadata

@@ -6,28 +6,10 @@ use structs::Error;
 
 type P<'a, 'b, F> = &'a mut Parser<'b, F>;
 
+const HELP: &str = include_str!("../assets/help.txt");
+
 pub fn command_help() {
-  println!("Command parameters are prefaced with an `@` symbol");
-  println!("Commands:");
-  println!("  add        @<title> @<author> @<pages>");
-  println!("  edit       @<reading_id> @<property> @<edit>");
-  println!("  finish     @<reading_id>");
-  println!("  rm         @<reading_id>");
-  println!("  reset      @<reading_id>");
-  println!("  find       @<keyword>");
-  println!("  id         @<reading_id>");
-  println!("  bookmark   @<reading_id> @<page>");
-  println!("  bookmarks  @<reading_id>");
-  println!("  reading    @<reading_id>");
-  println!("  show       @<all|reading|unread>");
-  println!("  stats      @<day|week|biweek|month|all|[1..n]>\n");
-  println!("  avg        @<[1..n]> Show average pages read last n days");
-  println!("  exit       Close program");
-  println!("  finished   Show all finished books");
-  println!("  unfinished Show all unfinished books");
-  println!("  last       Show oldest bookmark for an unfinished reading");
-  println!("  random     Choose a random unfinished reading");
-  println!("  save       Save newly added metadata");
+  print!("{HELP}");
 }
 
 pub fn add_reading(parser: P<impl FnMut(Action)>) -> Result<(), Error> {
