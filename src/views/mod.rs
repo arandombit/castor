@@ -43,9 +43,12 @@ pub fn print_reading_simple(reading: &Reading) {
 
 pub fn print_readings(readings: &Readings) {
   println!("----------- Library -----------");
-  for (_, reading) in readings {
+  let mut ids: Vec<u32> = readings.keys().copied().collect();
+  ids.sort();
+  for id in ids {
+    let reading = &readings[&id];
     if !reading.deleted {
-      print_reading(&reading);
+      print_reading(reading);
     }
   }
 }
