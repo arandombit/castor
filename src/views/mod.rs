@@ -144,27 +144,41 @@ pub fn flatten_bookmarks(bookmarks: &Vec<Bookmark>) -> Vec<u32> {
 }
 
 pub fn print_average(readings: &Readings, days: u32) {
-  // let now = Local::now();
-  // let bookmark = bookmarks.last().unwrap();
-  // let created = bookmarks.first().unwrap();
-  // let pages = pages;
-  // let pages_left = pages - bookmark.page;
-  // let cd = created.date;
-  // let duration = now.signed_duration_since(cd);
-  // let daily_average = bookmark.page as f64 / duration.num_days() as f64;
-  // let days_to_completion = pages_left as f64 / daily_average;
-  // let days_duration = Duration::days(days_to_completion as i64);
-  // let completion = now.checked_add_signed(days_duration).unwrap();
-  // let finish_date = completion.format("%a %b %e %Y").to_string();
-  // println!("{:?}", duration.num_days());
-  // println!("Pages Left: ......... {}", pages_left);
-  // println!("Daily Average: ...... {:.2}", daily_average);
-  // println!("Days To Completion: . {:.2}", days_to_completion);
-  // println!("Average Completion: . {}", finish_date);
+  if days == 0 {
+    println!("Days must be greater than zero.");
+    return;
+  }
 
-  // iterate through each reading's bookmarks until x date
-  // add number of pages for each reading's bookmarks that go up until x date
-  // then divide by number of days to get average
+  let now = Local::now();
+  let cutoff = now - Duration::days(days as i64);
+  let time_ago = cutoff.timestamp();
+
+  let mut total_pages = 0u32;
+  for (_, reading) in readings {
+    if reading.deleted {
+      continue;
+    }
+    let bookmarks = &reading.bookmarks;
+    if bookmarks.len() < 2 {
+      continue;
+    }
+    let mut index = bookmarks.len() - 1;
+    let mut pages_read = 0;
+    while index > 0 {
+      let r = &bookmarks[index];
+      let t = r.date.timestamp();
+      index -= 1;
+      if t > time_ago {
+        pages_read += r.page - bookmarks[index].page;
+      }
+    }
+    total_pages += pages_read;
+  }
+
+  let daily_average = total_pages as f64 / days as f64;
+  println!("----------- Last {} days -----------", days);
+  println!("Total pages read: .. {}", total_pages);
+  println!("Daily average: ...... {:.2}", daily_average);
 }
 
 pub fn print_ema(Reading { pages, bookmarks, .. }: &Reading) {
