@@ -1,7 +1,9 @@
 /target
 /backup
+/backups
 **/*.rs.bk
 
+.DS_Store
 data.json
 backup.*.json
 *.db
