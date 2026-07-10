@@ -14,6 +14,7 @@ Commands:
   stats      @<day|week|biweek|month|all|[1..n]>
 
   avg        @<[1..n]> Show average pages read last n days
+  chart      Show this week's pages-per-day bar chart (alias: week)
   exit       Close program
   finished   Show all finished books
   unfinished Show all unfinished books

@@ -51,6 +51,7 @@ impl<'a, F: FnMut(Action)> Parser<'a, F> {
       "stats" => { get_stats(self).ok(); },
       "time" => { println!("Best time for reading"); },
       "undo" => { undo_bookmark(self).ok(); },
+      "chart" | "week" => (self.dispatch)(Action::ShowWeeklyChart),
       "random" => (self.dispatch)(Action::ReadRandom),
       "finished" => (self.dispatch)(Action::ShowFinished),
       "last" => (self.dispatch)(Action::ShowOldestRead),

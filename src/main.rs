@@ -23,6 +23,7 @@ fn main() {
   let mut store = Store::create_store(root_reducer, State::new());
 
   store.dispatch(Action::LoadData);
+  store.dispatch(Action::ShowWeeklyChart);
 
   let stdin = std::io::stdin();
   let mut stdout = std::io::stdout();

@@ -181,6 +181,82 @@ pub fn print_average(readings: &Readings, days: u32) {
   println!("Daily average: ...... {:.2}", daily_average);
 }
 
+pub fn print_weekly_chart(readings: &Readings) {
+  const DAYS: usize = 7;
+
+  let now = Local::now();
+  let today = now.date();
+
+  // Bucket pages read into the last 7 days, indexed by days ago (0 = today).
+  let mut per_day = [0u32; DAYS];
+  for (_, reading) in readings {
+    if reading.deleted {
+      continue;
+    }
+    let bookmarks = &reading.bookmarks;
+    for index in 1..bookmarks.len() {
+      let current = &bookmarks[index];
+      let previous = &bookmarks[index - 1];
+      if current.page <= previous.page {
+        continue;
+      }
+      let days_ago = today.signed_duration_since(current.date.date()).num_days();
+      if days_ago >= 0 && (days_ago as usize) < DAYS {
+        per_day[days_ago as usize] += current.page - previous.page;
+      }
+    }
+  }
+
+  const BAR_WIDTH: usize = 40;
+
+  let total_pages: u32 = per_day.iter().sum();
+  let daily_average = total_pages as f64 / DAYS as f64;
+  let max_pages = *per_day.iter().max().unwrap_or(&0);
+
+  let avg_col = if max_pages > 0 {
+    (daily_average / max_pages as f64 * BAR_WIDTH as f64).round() as usize
+  } else {
+    0
+  };
+
+  println!("{}", "===== Pages read this week =====".bright_cyan());
+  // Oldest day on top, today at the bottom.
+  for days_ago in (0..DAYS).rev() {
+    let date = today - Duration::days(days_ago as i64);
+    let pages = per_day[days_ago];
+    let bar_len = if max_pages > 0 {
+      (pages as f64 / max_pages as f64 * BAR_WIDTH as f64).round() as usize
+    } else {
+      0
+    };
+
+    let mut bar = String::new();
+    for col in 0..BAR_WIDTH {
+      if col == avg_col && max_pages > 0 {
+        bar.push('\u{2503}'); // average marker line
+      } else if col < bar_len {
+        bar.push('\u{2588}'); // filled block
+      } else {
+        bar.push(' ');
+      }
+    }
+
+    println!(
+      "{} {} {}",
+      date.format("%a %d").to_string().yellow(),
+      bar.green(),
+      pages.to_string().bright_white()
+    );
+  }
+  println!(
+    "{} pages over {} days  \u{2503} daily average {}",
+    total_pages.to_string().bright_white(),
+    DAYS,
+    format!("{:.1}", daily_average).bright_yellow()
+  );
+  println!("{}", DIVIDER.bright_cyan());
+}
+
 pub fn print_ema(Reading { pages, bookmarks, .. }: &Reading) {
   let now = Local::now();
   let created = bookmarks.first().unwrap();

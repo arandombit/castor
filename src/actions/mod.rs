@@ -21,5 +21,6 @@ pub enum Action {
   ShowAverage(u32),
   ShowRecent(usize),
   ShowBookmarks(u32),
+  ShowWeeklyChart,
   UndoBookmark(u32)
 }

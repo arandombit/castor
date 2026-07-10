@@ -156,6 +156,9 @@ pub fn reducer(state: &Readings, action: &Action) -> Readings {
     Action::ShowAverage(ref days) => {
       print_average(&new_state, *days);
     },
+    Action::ShowWeeklyChart => {
+      print_weekly_chart(&new_state);
+    },
     Action::FindByID(ref reading_id) => {
       if let Some(reading) = new_state.get(reading_id) {
         print_reading(reading);
